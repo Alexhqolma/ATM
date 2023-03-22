@@ -26,7 +26,7 @@ public class BillController {
         this.billMapper = billMapper;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/add")
     public BillResponseDto createBill(@RequestBody BillRequestDto billRequestDto) {
         Bill bill = billService.save(billMapper.toModel(billRequestDto));
         return billMapper.toDto(bill);

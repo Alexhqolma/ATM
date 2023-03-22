@@ -3,12 +3,18 @@ package bank.atm.controller;
 import bank.atm.dto.mapper.BillMapper;
 import bank.atm.dto.mapper.UserMapper;
 import bank.atm.dto.request.BillRequestDto;
+import bank.atm.dto.request.UserRequestDto;
 import bank.atm.dto.response.UserResponseDto;
 import bank.atm.model.Account;
 import bank.atm.model.Bill;
+import bank.atm.model.User;
 import bank.atm.service.AccountService;
 import bank.atm.service.UserService;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,7 +73,14 @@ public class UserController {
 
     /** Add bill to ATM */
     @PostMapping("/add-bill")
-    public void addBillToAtm(List<BillRequestDto> bills) {
-
+    public UserResponseDto addBillToAtm(@RequestBody UserRequestDto userRequestDto,
+                             List<BillRequestDto> bills) {
+        User user = userMapper.toModel(userRequestDto);
+        List<Bill> newBills = new ArrayList<>();
+        for (BillRequestDto bill : bills) {
+            Bill toModel = billMapper.toModel(bill);
+            newBills.add(toModel);
+        }
+        return userMapper.toDto(userService.addBillToAtm(user, newBills));
     }
 }

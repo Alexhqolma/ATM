@@ -3,9 +3,9 @@ package bank.atm.dto.request;
 public class AccountRequestDto {
     private Long accountNumber;
     private Long userId;
-    private Long money;
+    private double money;
 
-    public Long getMoney() {
+    public double getMoney() {
         return money;
     }
 

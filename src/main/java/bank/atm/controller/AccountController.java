@@ -33,7 +33,7 @@ public class AccountController {
         this.billMapper = billMapper;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/add")
     public AccountResponseDto createAccount(@RequestBody AccountRequestDto accountRequestDto,
                                             @RequestBody User user) {
         Account account = accountMapper.toModel(accountRequestDto);
@@ -62,6 +62,7 @@ public class AccountController {
     public AccountResponseDto addBillToAccount(@RequestBody BillRequestDto billRequestDto,
                                                @PathVariable Long id) {
         Bill bill = billMapper.toModel(billRequestDto);
+
         return accountMapper.toDto(accountService.addBillToAccount(bill, id));
     }
 

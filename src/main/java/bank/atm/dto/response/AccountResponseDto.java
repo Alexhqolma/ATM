@@ -7,5 +7,5 @@ public class AccountResponseDto {
     private Long id;
     private Long accountNumber;
     private Long userId;
-    private Long money;
+    private double money;
 }

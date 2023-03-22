@@ -5,19 +5,22 @@ import bank.atm.model.Bill;
 import bank.atm.repository.AccountRepository;
 import bank.atm.service.AccountService;
 import java.util.List;
+import bank.atm.service.BillService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
+    private final BillService billService;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository,
+                              BillService billService) {
         this.accountRepository = accountRepository;
+        this.billService = billService;
     }
 
     @Override
     public Account save(Account account) {
-        account.setMoney(((account.getMoney() == null) ? 0L : account.getMoney()));
         return accountRepository.save(account);
     }
 
@@ -35,8 +38,8 @@ public class AccountServiceImpl implements AccountService {
     public Account addBillToAccount(Bill bill, Long accountId) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Can't find account by id " + accountId));
-        account.setMoney(((account.getMoney() == null)
-                ? 0L : account.getMoney()) + bill.getCount());
+        billService.save(bill);
+        account.setMoney(account.getMoney() + bill.getCount());
         return accountRepository.save(account);
     }
 

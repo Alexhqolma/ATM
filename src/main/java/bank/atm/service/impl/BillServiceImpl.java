@@ -27,6 +27,6 @@ public class BillServiceImpl implements BillService {
     @Override
     public Bill findById(Long id) {
         return billRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Can't find bill bt id " + id));
+                .orElseThrow(() -> new RuntimeException("Can't find bill by id " + id));
     }
 }
