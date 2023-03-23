@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class BillResponseDto {
     private Long id;
-    private double count;
+    private long count;
 }

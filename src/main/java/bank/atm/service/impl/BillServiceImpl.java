@@ -29,4 +29,14 @@ public class BillServiceImpl implements BillService {
         return billRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Can't find bill by id " + id));
     }
+
+    @Override
+    public List<Bill> findByCount(long count) {
+        return billRepository.findByCount(count);
+    }
+
+    @Override
+    public void delete(Bill bill) {
+        billRepository.delete(bill);
+    }
 }

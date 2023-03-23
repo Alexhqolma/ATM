@@ -29,7 +29,7 @@ public class InjectController {
     public String injectUser() {
         /** Add Bills */
         for (int i = 0; i < 5; i++) {
-            billService.save(new Bill(100.0));
+            billService.save(new Bill(100));
         }
 
         /** Add Users */
@@ -48,7 +48,7 @@ public class InjectController {
         Account account = new Account();
         account.setUser(user);
         account.setAccountNumber(456789745L);
-        account.setMoney(1000.0);
+        account.setMoney(1000);
         accountService.save(account);
         Account account2 = new Account();
         account2.setUser(user2);
@@ -56,11 +56,11 @@ public class InjectController {
         accountService.save(account2);
 
         /** Add Bills to Account */
-        accountService.addBillToAccount(new Bill(200.0), account.getId());
-        accountService.addBillToAccount(new Bill(100.0), account.getId());
-        accountService.addBillToAccount(new Bill(200.0), account.getId());
-        accountService.addBillToAccount(new Bill(500.0), account.getId());
-        accountService.addBillToAccount(new Bill(500.0), account.getId());
+        accountService.addBillToAccount(new Bill(200), account.getId());
+        accountService.addBillToAccount(new Bill(100), account.getId());
+        accountService.addBillToAccount(new Bill(200), account.getId());
+        accountService.addBillToAccount(new Bill(500), account.getId());
+        accountService.addBillToAccount(new Bill(500), account.getId());
 
         /** Send Money between accounts */
 
@@ -68,15 +68,15 @@ public class InjectController {
 
         /** Get money from account */
 
-        userService.getMoneyFromAccount(account.getId(), 500);
+        userService.getMoneyFromAccount(account.getId(), 600);
 
         /** Add Bills to ATM */
 
-        List<Bill> bills = List.of(new Bill(100.0),
-                new Bill(200.0),
-                new Bill(500.0),
-                new Bill(500.0),
-                new Bill(100.0));
+        List<Bill> bills = List.of(new Bill(100),
+                new Bill(200),
+                new Bill(500),
+                new Bill(500),
+                new Bill(100));
         userService.addBillToAtm(user, bills);
 
         return "Injection Done!";

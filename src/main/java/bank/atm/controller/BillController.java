@@ -45,4 +45,9 @@ public class BillController {
         return billMapper.toDto(billService.findById(id));
     }
 
+    @PostMapping("/count")
+    public int countBills(long count) {
+        return billService.findByCount(count).size();
+    }
+
 }

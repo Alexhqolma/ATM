@@ -12,12 +12,12 @@ public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private double count;
+    private long count;
 
     public Bill() {
     }
 
-    public Bill(double count) {
+    public Bill(long count) {
         this.count = count;
     }
 
@@ -29,11 +29,11 @@ public class Bill {
         this.id = id;
     }
 
-    public double getCount() {
+    public long getCount() {
         return count;
     }
 
-    public void setCount(double count) {
+    public void setCount(long count) {
         this.count = count;
     }
 }

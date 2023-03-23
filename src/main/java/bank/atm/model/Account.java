@@ -16,7 +16,7 @@ public class Account {
     private Long accountNumber;
     @ManyToOne
     private User user;
-    private double money;
+    private long money;
 
     public Long getId() {
         return id;
@@ -42,11 +42,11 @@ public class Account {
         this.user = user;
     }
 
-    public double getMoney() {
+    public long getMoney() {
         return money;
     }
 
-    public void setMoney(double money) {
+    public void setMoney(long money) {
         this.money = money;
     }
 }

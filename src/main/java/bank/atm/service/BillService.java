@@ -9,4 +9,8 @@ public interface BillService {
     List<Bill> findAll();
 
     Bill findById(Long id);
+
+    List<Bill> findByCount(long count);
+
+    void delete(Bill bill);
 }

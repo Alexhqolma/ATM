@@ -1,9 +1,9 @@
 package bank.atm.dto.request;
 
 public class BillRequestDto {
-    private double count;
+    private long count;
 
-    public double getCount() {
+    public long getCount() {
         return count;
     }
 }
