@@ -3,19 +3,15 @@ package bank.atm.dto.mapper;
 import bank.atm.dto.request.AccountRequestDto;
 import bank.atm.dto.response.AccountResponseDto;
 import bank.atm.model.Account;
-import bank.atm.service.BillService;
 import bank.atm.service.UserService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccountMapper {
     private final UserService userService;
-    private final BillService billService;
 
-    public AccountMapper(UserService userService,
-                         BillService billService) {
+    public AccountMapper(UserService userService) {
         this.userService = userService;
-        this.billService = billService;
     }
 
     public Account toModel(AccountRequestDto accountRequestDto) {

@@ -1,9 +1,11 @@
 package bank.atm.dto.request;
 
-public class BillRequestDto {
-    private long count;
+import java.math.BigDecimal;
 
-    public long getCount() {
+public class BillRequestDto {
+    private BigDecimal count;
+
+    public BigDecimal getCount() {
         return count;
     }
 }

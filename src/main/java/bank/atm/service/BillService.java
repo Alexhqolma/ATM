@@ -13,4 +13,6 @@ public interface BillService {
     List<Bill> findByCount(long count);
 
     void delete(Bill bill);
+
+    void deleteFirstEntities(int count);
 }

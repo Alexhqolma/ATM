@@ -1,11 +1,13 @@
 package bank.atm.dto.request;
 
+import java.math.BigDecimal;
+
 public class AccountRequestDto {
     private Long accountNumber;
     private Long userId;
-    private long money;
+    private BigDecimal money;
 
-    public long getMoney() {
+    public BigDecimal getMoney() {
         return money;
     }
 

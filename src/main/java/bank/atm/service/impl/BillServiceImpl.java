@@ -39,4 +39,9 @@ public class BillServiceImpl implements BillService {
     public void delete(Bill bill) {
         billRepository.delete(bill);
     }
+
+    @Override
+    public void deleteFirstEntities(int count) {
+        billRepository.deleteFirstEntities(count);
+    }
 }

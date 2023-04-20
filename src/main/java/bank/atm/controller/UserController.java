@@ -10,11 +10,8 @@ import bank.atm.model.Bill;
 import bank.atm.model.User;
 import bank.atm.service.AccountService;
 import bank.atm.service.UserService;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

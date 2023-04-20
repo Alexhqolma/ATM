@@ -8,19 +8,20 @@ import bank.atm.service.AccountService;
 import bank.atm.service.BillService;
 import bank.atm.service.UserService;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
     private static final int BILL_CRITERIA = 100;
-    private final UserRepository userRepository;
-    private final AccountService accountService;
-    private final BillService billService;
     private static final int BILLFIVE = 500;
     private static final int BILLTWO = 200;
     private static final int BILLONE = 100;
+    private final UserRepository userRepository;
+    private final AccountService accountService;
+    private final BillService billService;
 
     public UserServiceImpl(UserRepository userRepository,
                            AccountService accountService,
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User topUpAccount(Bill bill, Long accountId, Long userId) {
         Account account = accountService.findById(accountId);
-        account.setMoney(account.getMoney() + bill.getCount());
+        account.setMoney(account.getMoney().add(bill.getCount()));
         accountService.save(account);
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Can't find user by id: " + userId));
@@ -56,9 +57,9 @@ public class UserServiceImpl implements UserService {
         Account accountFrom = accountService.findById(accountFromId);
         checkBill(sum);
         checkAccount(accountFrom, sum);
-        accountFrom.setMoney(accountFrom.getMoney() - sum);
+        accountFrom.setMoney(accountFrom.getMoney().subtract(BigDecimal.valueOf(sum)));
         Account accountTo = accountService.findById(accountToId);
-        accountTo.setMoney(accountTo.getMoney() + sum);
+        accountTo.setMoney(accountTo.getMoney().add(BigDecimal.valueOf(sum)));
         accountService.save(accountFrom);
         accountService.save(accountTo);
         return userRepository.findById(accountFrom.getUser().getId())
@@ -72,10 +73,10 @@ public class UserServiceImpl implements UserService {
         Account account = accountService.findById(accountId);
         checkBill(sum);
         checkAccount(account, sum);
-        User user = userRepository.findById(account.getUser().getId())
+        final User user = userRepository.findById(account.getUser().getId())
                 .orElseThrow(() -> new RuntimeException("Can't find user by id "
                         + account.getUser().getId()));
-        account.setMoney(account.getMoney() - sum);
+        account.setMoney(account.getMoney().subtract(BigDecimal.valueOf(sum)));
         deleteBillsFromAtm(sum);
         accountService.save(account);
         return user;
@@ -83,36 +84,52 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addBillToAtm(User user, List<Bill> bills) {
-        for (Bill bill : bills) {
-            billService.save(bill);
-        }
+        bills.stream().map(billService::save).collect(Collectors.toList());
         return user;
     }
 
     private void checkBill(int sum) {
-        if (sum % BILL_CRITERIA != 0 || sum <= 0) {
-            throw new RuntimeException("Incorrect sum");
+        List<Bill> bills = billService.findAll();
+        int count = 0;
+        for (int i = 0; i < bills.size(); i++) {
+            count += bills.get(i).getCount().intValue();
+        }
+        if (sum % BILL_CRITERIA != 0 || sum <= 0 || count < sum) {
+            throw new RuntimeException("Incorrect sum or ATM have no money for now");
         }
     }
 
     private void checkAccount(Account account, int sum) {
-        if (account.getMoney() < sum) {
+        if (account.getMoney().intValue() < sum) {
             throw new RuntimeException("You have not enough money on your account!");
         }
     }
 
     private void deleteBillsFromAtm(int sum) {
-        while (sum - BILLFIVE >= 0) {
-            billService.delete(billService.findByCount(BILLFIVE).get(0));
-            sum = sum - BILLFIVE;
+        List<Bill> fiveBills = billService.findByCount(BILLFIVE);
+        List<Bill> twoBills = billService.findByCount(BILLTWO);
+        List<Bill> oneBills = billService.findByCount(BILLONE);
+
+        int fiveBill = sum / BILLFIVE;
+        if (fiveBill > fiveBills.size()) {
+            fiveBill = fiveBills.size();
         }
-        while (sum - BILLTWO >= 0) {
-            billService.delete(billService.findByCount(BILLTWO).get(0));
-            sum = sum - BILLTWO;
+        sum = sum - (fiveBill * BILLFIVE);
+        billService.deleteFirstEntities(fiveBill);
+        if (sum > 0) {
+            int twoBill = sum / BILLTWO;
+            if (twoBill > twoBills.size()) {
+                twoBill = twoBills.size();
+            }
+            sum = sum - (twoBill * BILLTWO);
+            billService.deleteFirstEntities(twoBill);
         }
-        while (sum - BILLONE >= 0) {
-            billService.delete(billService.findByCount(BILLONE).get(0));
-            sum = sum - BILLONE;
+        if (sum > 0) {
+            int oneBill = sum / BILLONE;
+            if (oneBill > oneBills.size()) {
+                throw new RuntimeException("ATM is out of bills!");
+            }
+            billService.deleteFirstEntities(oneBill);
         }
     }
 }

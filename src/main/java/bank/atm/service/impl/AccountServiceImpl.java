@@ -4,8 +4,9 @@ import bank.atm.model.Account;
 import bank.atm.model.Bill;
 import bank.atm.repository.AccountRepository;
 import bank.atm.service.AccountService;
-import java.util.List;
 import bank.atm.service.BillService;
+import java.math.BigDecimal;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +22,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account save(Account account) {
+        if (account.getMoney() == null) {
+            account.setMoney(BigDecimal.valueOf(0));
+        }
         return accountRepository.save(account);
     }
 
@@ -39,7 +43,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Can't find account by id " + accountId));
         billService.save(bill);
-        account.setMoney(account.getMoney() + bill.getCount());
+        account.setMoney(account.getMoney().add(bill.getCount()));
         return accountRepository.save(account);
     }
 
