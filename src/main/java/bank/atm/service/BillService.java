@@ -14,5 +14,5 @@ public interface BillService {
 
     void delete(Bill bill);
 
-    void deleteFirstEntities(int count);
+    void deleteBills(int count);
 }

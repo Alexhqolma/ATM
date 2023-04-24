@@ -27,12 +27,10 @@ public class InjectController {
 
     @GetMapping("/inject")
     public String injectUser() {
-        /** Add Bills */
         for (int i = 0; i < 5; i++) {
             billService.save(new Bill(BigDecimal.valueOf(100)));
         }
 
-        /** Add Users */
         User user = new User();
         user.setLogin("a");
         user.setPassword("a");
@@ -44,7 +42,6 @@ public class InjectController {
         user2.setRole("USER");
         userService.save(user2);
 
-        /** Add Accounts */
         Account account = new Account();
         account.setUser(user);
         account.setAccountNumber(456789745L);
@@ -55,22 +52,15 @@ public class InjectController {
         account2.setAccountNumber(778875556464L);
         accountService.save(account2);
 
-        /** Add Bills to Account */
         accountService.addBillToAccount(new Bill(BigDecimal.valueOf(200)), account.getId());
         accountService.addBillToAccount(new Bill(BigDecimal.valueOf(100)), account.getId());
         accountService.addBillToAccount(new Bill(BigDecimal.valueOf(200)), account.getId());
         accountService.addBillToAccount(new Bill(BigDecimal.valueOf(500)), account.getId());
         accountService.addBillToAccount(new Bill(BigDecimal.valueOf(500)), account.getId());
 
-        /** Send Money between accounts */
-
         userService.sendFromAccountToAccount(account.getId(), account2.getId(), 400);
 
-        /** Get money from account */
-
         userService.getMoneyFromAccount(account.getId(), 900);
-
-        /** Add Bills to ATM */
 
         List<Bill> bills = List.of(new Bill(BigDecimal.valueOf(100)),
                 new Bill(BigDecimal.valueOf(200)),

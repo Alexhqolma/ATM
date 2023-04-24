@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BillRepository extends JpaRepository<Bill, Long> {
     List<Bill> findByCount(long count);
 
-    default void deleteFirstEntities(int count) {
+    default void deleteBills(int count) {
         PageRequest pageRequest = PageRequest.of(0, count);
         List<Bill> bills = findAll(pageRequest).getContent();
         deleteAll(bills);

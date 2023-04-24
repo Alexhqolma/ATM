@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
     private static final int BILL_CRITERIA = 100;
-    private static final int BILLFIVE = 500;
-    private static final int BILLTWO = 200;
-    private static final int BILLONE = 100;
+    private static final int FIVE_HUNDRED = 500;
+    private static final int TWO_HUNDRED = 200;
+    private static final int ONE_HUNDRED = 100;
     private final UserRepository userRepository;
     private final AccountService accountService;
     private final BillService billService;
@@ -106,30 +106,30 @@ public class UserServiceImpl implements UserService {
     }
 
     private void deleteBillsFromAtm(int sum) {
-        List<Bill> fiveBills = billService.findByCount(BILLFIVE);
-        List<Bill> twoBills = billService.findByCount(BILLTWO);
-        List<Bill> oneBills = billService.findByCount(BILLONE);
+        List<Bill> fiveBills = billService.findByCount(FIVE_HUNDRED);
+        List<Bill> twoBills = billService.findByCount(TWO_HUNDRED);
+        List<Bill> oneBills = billService.findByCount(ONE_HUNDRED);
 
-        int fiveBill = sum / BILLFIVE;
+        int fiveBill = sum / FIVE_HUNDRED;
         if (fiveBill > fiveBills.size()) {
             fiveBill = fiveBills.size();
         }
-        sum = sum - (fiveBill * BILLFIVE);
-        billService.deleteFirstEntities(fiveBill);
+        sum = sum - (fiveBill * FIVE_HUNDRED);
+        billService.deleteBills(fiveBill);
         if (sum > 0) {
-            int twoBill = sum / BILLTWO;
+            int twoBill = sum / TWO_HUNDRED;
             if (twoBill > twoBills.size()) {
                 twoBill = twoBills.size();
             }
-            sum = sum - (twoBill * BILLTWO);
-            billService.deleteFirstEntities(twoBill);
+            sum = sum - (twoBill * TWO_HUNDRED);
+            billService.deleteBills(twoBill);
         }
         if (sum > 0) {
-            int oneBill = sum / BILLONE;
+            int oneBill = sum / ONE_HUNDRED;
             if (oneBill > oneBills.size()) {
                 throw new RuntimeException("ATM is out of bills!");
             }
-            billService.deleteFirstEntities(oneBill);
+            billService.deleteBills(oneBill);
         }
     }
 }

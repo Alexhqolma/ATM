@@ -3,10 +3,8 @@ package bank.atm.controller;
 import bank.atm.dto.mapper.AccountMapper;
 import bank.atm.dto.mapper.BillMapper;
 import bank.atm.dto.request.AccountRequestDto;
-import bank.atm.dto.request.BillRequestDto;
 import bank.atm.dto.response.AccountResponseDto;
 import bank.atm.model.Account;
-import bank.atm.model.Bill;
 import bank.atm.model.User;
 import bank.atm.service.AccountService;
 import java.util.List;
@@ -56,14 +54,6 @@ public class AccountController {
                 .stream()
                 .map(accountMapper::toDto)
                 .collect(Collectors.toList());
-    }
-
-    @PostMapping("/add-bill/{id}")
-    public AccountResponseDto addBillToAccount(@RequestBody BillRequestDto billRequestDto,
-                                               @PathVariable Long id) {
-        Bill bill = billMapper.toModel(billRequestDto);
-
-        return accountMapper.toDto(accountService.addBillToAccount(bill, id));
     }
 
     @GetMapping("/{id}")
