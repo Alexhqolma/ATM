@@ -1,7 +1,6 @@
 package bank.atm.dto.request;
 
 import jakarta.validation.constraints.Size;
-
 import java.util.List;
 
 public class UserRequestDto {

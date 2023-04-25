@@ -4,6 +4,7 @@ import bank.atm.model.Bill;
 import bank.atm.repository.BillRepository;
 import bank.atm.service.BillService;
 import java.util.List;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +26,11 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    public List<Bill> findAll(PageRequest pageRequest) {
+        return billRepository.findAll(pageRequest).getContent();
+    }
+
+    @Override
     public Bill findById(Long id) {
         return billRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Can't find bill by id " + id));
@@ -41,7 +47,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public void deleteBills(int count) {
-        billRepository.deleteBills(count);
+    public void deleteTopByOrderByIdAsc(int limit, int billCount) {
+        billRepository.deleteTopByOrderByIdAsc(limit, billCount);
     }
 }

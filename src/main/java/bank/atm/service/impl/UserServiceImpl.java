@@ -115,21 +115,21 @@ public class UserServiceImpl implements UserService {
             fiveBill = fiveBills.size();
         }
         sum = sum - (fiveBill * FIVE_HUNDRED);
-        billService.deleteBills(fiveBill);
+        billService.deleteTopByOrderByIdAsc(fiveBill, FIVE_HUNDRED);
         if (sum > 0) {
             int twoBill = sum / TWO_HUNDRED;
             if (twoBill > twoBills.size()) {
                 twoBill = twoBills.size();
             }
             sum = sum - (twoBill * TWO_HUNDRED);
-            billService.deleteBills(twoBill);
+            billService.deleteTopByOrderByIdAsc(twoBill, TWO_HUNDRED);
         }
         if (sum > 0) {
             int oneBill = sum / ONE_HUNDRED;
             if (oneBill > oneBills.size()) {
                 throw new RuntimeException("ATM is out of bills!");
             }
-            billService.deleteBills(oneBill);
+            billService.deleteTopByOrderByIdAsc(oneBill, ONE_HUNDRED);
         }
     }
 }
